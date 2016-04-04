@@ -154,6 +154,59 @@
 				</section>
 
 				<section>
+					<h2>Diving In</h2>
+					<!-- Here, we'll go into depth on our two key observations -->
+				</section>
+
+				<section>
+
+					<!-- First, we showcase the code for the migration manager and show how it plugs into the load side of the interface. Show a few canonical manifestations including one that renames a field. Share risks of renaming a field (queries, indexes), situations where that doesn't apply, and ways to mitigate the issue. -->
+
+					<section>
+						<h2>Migration Manager</h2>
+						<ul>
+							<li>schema version</li>
+							<li>incrementing integer</li>
+							<li>migrates on load</li>
+							<li>untouched on save</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Python Code</h2>
+						...
+					</section>
+
+					<section>
+						<h2>Caution - Field Rename</h2>
+						<!-- some field rename operations require special consideration -->
+						<ul>
+							<li>queries</li>
+							<li>indexes</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Mitigation</h2>
+						<ul>
+							<li>support both fields</li>
+							<li>maintain dual indexes</li>
+							<li>backfill migration</li>
+						</ul>
+					</section>
+
+				</section>
+
+				<section>
+					<!-- Second, Bryan will now showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents). -->
+
+					<section>
+						<h2>Global Unified Cluster</h2>
+					</section>
+
+				</section>
+
+				<section>
 					<section>
 						<h2>Predictions</h2>
 						<ul>
