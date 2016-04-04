@@ -116,7 +116,7 @@
 						<ul>
 							<li>passion for Python</li>
 							<li>studied web data (semi-structured)</li>
-							<li>frustrated by relational constraints <!-- is there a positive spin to this? Want to talk about friction of ORMs and managing semi-structured data in a highly structured database. --></li>
+							<li>motivated by relational constraints <!-- Want to mention friction of ORMs and managing semi-structured data in a highly structured database. --></li>
 						</ul>
 					</section>
 
@@ -125,6 +125,94 @@
 						<ul>
 							<li>experienced developer</li>
 							<li>implemented sharding strategy</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>The Plan</h2>
+					</section>
+
+					<section>
+						<!-- connect back to two challenges -->
+						<h2>Flexible Data Storage</h2>
+						<ul>
+							<li>store <!-- respondent's --> answers as document <!-- originally as a blob --></li>
+							<li>(automatic) schema migration</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Global Sharded Cluster</h2>
+						<ul>
+							<li>provided as a service <!-- a part of the infrastructure available to any and all applications --></li>
+							<li>tag-aware sharding</li>
+							<li>useful for dozens of other applications</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Predictions</h2>
+						<ul>
+							<li>migrate with whimsy</li>
+							<li>all apps in global cluster</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Shard Creation</h2>
+						<pre><code>def create_db_in_shard(db_name, shard, client=None):
+	"""
+	In a sharded cluster, create a database in a particular shard.
+	"""
+	client = client or pymongo.MongoClient()
+	# flush the router config to ensure it's not stale
+	res = client.admin.command('flushRouterConfig')
+	if not res.get('ok'):
+		raise RuntimeError("unable to flush router config")
+	if shard not in get_ids(client.config.shards):
+		raise ValueError(nf("Unknown shard {shard}"))
+	if db_name in get_ids(client.config.databases):
+		raise ValueError("database already exists")
+	# MongoDB doesn't have a 'create database' command, so insert an
+	#  item into a collection and then drop the collection.
+	client[db_name].foo.insert({'foo': 1})
+	client[db_name].foo.drop()
+	if client[db_name].collection_names():
+		raise ValueError("database has collections")
+	res = client.admin.command('movePrimary', value=db_name, to=shard)
+	if not res.get('ok'):
+		raise RuntimeError(str(res))
+	return nf("Successfully created {db_name} in {shard} via {hostname}")</code></pre>
+					</section>
+
+					<section>
+						<h2>Multi-Dimensional Partitioning</h2>
+						<ul>
+							<li>still partition for archival</li>
+							<li>managed programmatically</li>
+							<li>seek additional layers of partitioning</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Partitioning Motives</h2>
+						<ul>
+							<li>locality</li>
+							<li>distribution (size)</li>
+							<li>distribution (performance)</li>
+							<li>storage </li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Wishes</h2>
+						<ul>
+							<li>Supply shard hint, independent from query <!--todo: find JIRA ref --></li>
+							<li>Generalized custom shard logic, independent from data in records</li>
 						</ul>
 					</section>
 				</section>
