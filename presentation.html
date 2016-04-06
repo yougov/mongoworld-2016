@@ -46,7 +46,7 @@
 
 				<section>
 					<ul>
-						<li style="padding: 1em;">YouGov serves highly-dynamic data collection (surveys) through semi-structured data support in MongoDB.</li>
+						<li style="padding: 1em;">YouGov conducts highly dynamic surveys that rely on MongoDB's rich support for semi-structured data.</li>
 
 						<li style="padding: 1em;">YouGov uses tag-aware sharding to provide MongoDB-as-a-Service (MongoDBaaS) for a global operation.</li>
 
@@ -58,7 +58,7 @@
 					<section>
 						<h1>Two Challenges</h1>
 						<!--
-						YouGov faces many challegenges,
+						YouGov faces many challenges,
 						but today we will discuss two
 						that are particularly salient to
 						this audience.
@@ -68,17 +68,18 @@
 					<section>
 						<h2>Challenge: Survey Collection</h2>
 						<ul>
-							<li>high throughput</li>
-							<li>highly dynamic</li>
+							<li>highly dynamic surveys</li>
 							<li>programmed by users</li>
 							<li>semi-structured data</li>
+							<li>high throughput <!-- daily peak submission rate approaches 4K/minute --></li>
+							<li><em>increasing</em> throughput <!-- 5GB/mo during 2011; 90GB/mo during 2015 Q4 --></li>
 						</ul>
 					</section>
 
 					<section>
 						<h2>Challenge: Global Operation</h2>
 						<ul>
-							<li>23 countries in 5 continents</li>
+							<li>YouGov operates in 23 countries on 5 continents</li>
 							<li>local responsiveness crucial</li>
 							<li>avoid specialized datastore</li>
 							<li>jurisdictional constraints</li>
@@ -104,7 +105,7 @@
 					</section>
 
 					<section>
-						<h2>About YouGov IT Dev</h2>
+						<h2>About YouGov DevOps</h2>
 						<ul>
 							<li>heavily leverage Python and open-source</li>
 							<li>streamlined deployment <!-- near-continuous --></li>
@@ -136,9 +137,9 @@
 
 					<section>
 						<!-- connect back to two challenges -->
-						<h2>Flexible Data Storage</h2>
+						<h2>Flexible Data Model</h2>
 						<ul>
-							<li>store <!-- respondent's --> answers as document <!-- originally as a blob --></li>
+							<li>store survey responses as document <!-- originally as a blob --></li>
 							<li>(automatic) schema migration</li>
 						</ul>
 					</section>
@@ -178,7 +179,7 @@
 					</section>
 
 					<section>
-						<h2>Caution - Field Rename</h2>
+						<h2>Caution: Field Rename</h2>
 						<!-- some field rename operations require special consideration -->
 						<ul>
 							<li>queries</li>
@@ -216,7 +217,7 @@
 					</section>
 
 					<section>
-						<h2>Shard Creation</h2>
+						<h2>Database Creation</h2>
 						<pre><code>def create_db_in_shard(db_name, shard, client=None):
 	"""
 	In a sharded cluster, create a database in a particular shard.
