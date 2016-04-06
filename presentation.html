@@ -147,9 +147,9 @@
 					<section>
 						<h2>Global Sharded Cluster</h2>
 						<ul>
-							<li>provided as a service <!-- a part of the infrastructure available to any and all applications --></li>
-							<li>tag-aware sharding</li>
-							<li>useful for dozens of other applications</li>
+							<li>2 datacenters separated by 5,400 miles</li>
+							<li>partitions survey data via tag-aware sharding</li>
+							<li>provides Database-as-a-Service (DBaaS)<!-- a part of the infrastructure available to any and all applications --></li>
 						</ul>
 					</section>
 				</section>
@@ -202,7 +202,115 @@
 					<!-- Second, Bryan will now showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents). -->
 
 					<section>
-						<h2>Global Unified Cluster</h2>
+						<h2>Global Sharded Cluster</h2>
+						<ul>
+							<li>2 datacenters
+								<ul>
+									<li>London ("EMEA")</li>
+									<li>Palo Alto, CA ("US")</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Global Sharded Cluster</h2>
+						<ul>
+							<li>6 shards <!-- Each shard is a replica set with (typically) 3 data-bearing members. -->
+								<ul>
+									<li>3 in EMEA</li>
+									<li>2 in US</li>
+									<li>1 with RS members in EMEA & US</li><!-- referred to affectionately as "EARTH1" -->
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Survey Data Schema</h2>
+						<ul>
+							<li>an interview represents 1 user's responses to 1 survey</li>
+						</ul>
+						<pre><code>{
+	region: "EMEA",
+	panel_id: 15,
+	survey_id: "rfc1274",
+	user_id: 216074,
+	responses: {
+		favourite_drink: "chocolate milk",
+		// ...
+	}
+}</code></pre>
+
+					</section>
+
+					<section>
+						<h2>Interview Life Cycle</h2>
+						<!-- There are 2 natural phases of the interview life cycle. -->
+						<ul>
+							<li>collection phase
+								<ul>
+									<li>relatively short</li>
+									<li>very active reads/writes</li>
+									<li>most queries target a single document</li>
+								</ul>
+							</li>
+							<li>retention phase
+								<ul>
+									<li>indefinitely long</li>
+									<li>sporadic reads</li>
+									<li>neglible writes</li>
+									<li>most queries target groups of documents</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Shard Key Selection</h2>
+						<ul>
+							<li>{region: 1, user_id: 1}</li>
+							<li>{region: 1, survey_id: 1}</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Tag-Aware Sharding</h2>
+						<ul>
+							<li>sh.addShardTag(...)</li>
+							<li>sh.shardCollection(...)</li>
+							<li>sh.addTagRange(...)</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Caution: Non-Targeted Queries</h2>
+					</section>
+
+					<section>
+						<h2>(Mongo) Database-as-a-Service</h2>
+						<ul>
+							<li><em>mongos</em> instance running on each app server</li>
+							<li>applications connect to mongodb://localhost/</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Read Preference "nearest"</h2>
+						<ul>
+							<li>provides low-latency reads when using geographically distributed replica sets</li>
+						</ul>
+						<!-- read preference defaults to ReadPreference.PRIMARY -->
+						<pre><code>from pymongo import MongoClient, ReadPreference
+
+# set read preference on the client
+mongo = MongoClient('localhost',
+                    read_preference=ReadPreference.NEAREST)
+
+# ...or on an individual database
+mongo = MongoClient('localhost')
+db = mongo.get_database('dragoman',
+                        read_preference=ReadPreference.NEAREST)</code></pre>
 					</section>
 
 				</section>
