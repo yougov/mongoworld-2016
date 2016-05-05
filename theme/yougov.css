@@ -1,0 +1,7 @@
+body {
+	background-image: url(people.jpeg);
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:center bottom;
+	background-color:white;
+}
