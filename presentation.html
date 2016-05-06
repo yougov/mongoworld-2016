@@ -59,6 +59,10 @@
 				<section>
 					<section>
 						<h2>About Us</h2>
+						<aside class="notes">
+						Before we go into the talk, allow
+						me to briefly tell you about YouGov.
+						</aside>
 					</section>
 
 					<section>
@@ -101,12 +105,12 @@
 				<section>
 					<section>
 						<h1>Two Challenges</h1>
-						<!--
+						<aside class="notes">
 						YouGov faces many challenges,
 						but today we will discuss two
 						that are particularly salient to
 						this audience.
-						-->
+						</aside>
 					</section>
 
 					<section>
@@ -115,9 +119,12 @@
 							<li>highly dynamic surveys</li>
 							<li>programmed by users</li>
 							<li>semi-structured data</li>
-							<li>high throughput <!-- daily peak submission rate approaches 4K/minute --></li>
-							<li><em>increasing</em> throughput <!-- 5GB/mo during 2011; 90GB/mo during 2015 Q4 --></li>
+							<li>high throughput</li>
+							<li><em>increasing</em> throughput</li>
 						</ul>
+						<aside class="notes">
+						daily peak submission rate approaches 4K/minute; 5GB/mo in 2011 -> 90GB/mo during 2015 Q4
+						</aside>
 					</section>
 
 					<section>
@@ -128,23 +135,26 @@
 							<li>avoid specialized datastore</li>
 							<li>jurisdictional constraints</li>
 						</ul>
-						<!-- before we go into the talk, allow
-						me to briefly tell you about YouGov. -->
 					</section>
 				</section>
 
 				<section>
 					<section>
 						<h2>The Plan</h2>
+						<aside class="notes">
+						Our dev team set out to tackle each of
+						these two challenges within MongoDB.
+						</aside>
 					</section>
 
 					<section>
-						<!-- connect back to two challenges -->
 						<h2>Flexible Data Model</h2>
 						<ul>
-							<li>store survey responses as document <!-- originally as a blob --></li>
+							<li>store survey responses as document</li>
 							<li>(automatic) schema migration</li>
 						</ul>
+						<aside class="notes">Originally, responses were
+						stored as a blob of pickled Python</aside>
 					</section>
 
 					<section>
@@ -159,12 +169,12 @@
 
 				<section>
 					<h2>Diving In</h2>
-					<!-- Here, we'll go into depth on our two key observations -->
+					<aside class="notes">
+					Here, we'll go into depth on our two key observations
+					</aside>
 				</section>
 
 				<section>
-
-					<!-- First, we showcase the code for the migration manager and show how it plugs into the load side of the interface. Show a few canonical manifestations including one that renames a field. Share risks of renaming a field (queries, indexes), situations where that doesn't apply, and ways to mitigate the issue. -->
 
 					<section>
 						<h2>Migration Manager</h2>
@@ -174,6 +184,9 @@
 							<li>migrates on load</li>
 							<li>untouched on save</li>
 						</ul>
+
+						<aside class="notes">First, we showcase the code for the migration manager and show how it plugs into the load side of the interface. Show a few canonical manifestations including one that renames a field. Share risks of renaming a field (queries, indexes), situations where that doesn't apply, and ways to mitigate the issue.</aside>
+
 					</section>
 
 					<section>
@@ -259,7 +272,9 @@ def v7_to_6(manager, case):
 
 					<section>
 						<h2>Caution: Field Rename</h2>
-						<!-- some field rename operations require special consideration -->
+						<aside class="notes">
+						Some field rename operations require special consideration.
+						</aside>
 						<ul>
 							<li>queries</li>
 							<li>indexes</li>
@@ -290,7 +305,9 @@ def v10_to_11(manager, case):
 				</section>
 
 				<section>
-					<!-- Second, Bryan will now showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents). -->
+					<aside class="notes">
+					Second, Bryan will now showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents).
+					</aside>
 
 					<section>
 						<h2>Global Sharded Cluster</h2>
@@ -501,6 +518,8 @@ db = mongo.get_database('dragoman',
 				progress: true,
 				history: true,
 				center: true,
+
+				showNotes: true,
 
 				transition: 'slide', // none/fade/slide/convex/concave/zoom
 
