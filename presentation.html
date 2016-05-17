@@ -297,11 +297,13 @@ def v7_to_6(manager, case):
 					</section>
 
 					<section>
-						<h2>Caution: Forward Compatibility</h2>
+						<h2>Other considerations</h2>
 						<ul>
-							<li>future releases may create later versions</li>
-							<li>all deployed versions must have latest migrations</li>
+							<li>single-document design</li>
+							<li>forward-compatibility</li>
+							<li>reversible operations</li>
 						</ul>
+						<aside class="notes">Other things to consider, we've only employed this technique in a single-document design. I imagine an implementation that considers multiple documents may be possible, but it isn't obvious to me that the abstraction could apply. Also, it's important to be aware that there must be forward compatibility: every deployed consumer must have the latest migrations to support documents saved in the highest schema number. Finally, the changes to the schema must be somehow reversible.</aside>
 					</section>
 
 					<section>
@@ -442,18 +444,6 @@ db = mongo.get_database('dragoman',
                         read_preference=ReadPreference.NEAREST)</code></pre>
 					</section>
 
-				</section>
-
-				<section>
-					<section>
-						<h2>Predictions</h2>
-						<ul>
-							<li>migrate with whimsy</li>
-							<li>all apps in global cluster</li>
-						</ul>
-						<aside class="notes"></aside>
-					</section>
-
 					<section>
 						<h2>Database Creation</h2>
 						<pre><code>def create_db_in_shard(db_name, shard, client=None):
@@ -500,12 +490,25 @@ db = mongo.get_database('dragoman',
 						</ul>
 					</section>
 
+				</section>
+
+				<section>
+					<section>
+						<h2>Predictions</h2>
+						<ul>
+							<li>migrate with whimsy</li>
+							<li>all apps in global cluster</li>
+						</ul>
+						<aside class="notes">YouGov is dedicated to facilitating prediction, and I'll make some predictions of my own based on what I've shared here - with MongoDB, we will continue to migrate our schemas with whimsy and we will support the breadth and depth of our semi-structured data needs in a uniformally managed but geographically diverse global cluster.</aside>
+					</section>
+
 					<section>
 						<h2>Wishes</h2>
 						<ul>
 							<li>Supply shard hint, independent from query <a href="https://jira.mongodb.org/browse/SERVER-11991">SERVER-11991</a></li>
 							<li>Generalized custom shard logic, independent from data in records</li>
 							<li>Oplog-only replica for creating new replicas <a href="https://jira.mongodb.org/browse/SERVER-14539">Server-14539</a></li>
+							<li>Embedded solution (sqlite)</li>
 						</ul>
 					</section>
 				</section>
