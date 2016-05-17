@@ -278,13 +278,13 @@ def v7_to_6(manager, case):
 
 					<section>
 						<h2>Caution: Field Rename</h2>
-						<aside class="notes">
-						Some field rename operations require special consideration.
-						</aside>
 						<ul>
 							<li>queries</li>
 							<li>indexes</li>
 						</ul>
+						<aside class="notes">
+						Some field rename operations require special consideration.
+						</aside>
 					</section>
 
 					<section>
@@ -293,6 +293,14 @@ def v7_to_6(manager, case):
 							<li>support both fields</li>
 							<li>maintain dual indexes</li>
 							<li>backfill migration</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Caution: Forward Compatibility</h2>
+						<ul>
+							<li>future releases may create later versions</li>
+							<li>all deployed versions must have latest migrations</li>
 						</ul>
 					</section>
 
@@ -312,7 +320,7 @@ def v10_to_11(manager, case):
 
 				<section>
 					<aside class="notes">
-					 now showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents).
+					 Having dived deep into the code, I'd like to step back out and look at the big picture and showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents).
 					</aside>
 
 					<section>
@@ -443,6 +451,7 @@ db = mongo.get_database('dragoman',
 							<li>migrate with whimsy</li>
 							<li>all apps in global cluster</li>
 						</ul>
+						<aside class="notes"></aside>
 					</section>
 
 					<section>
