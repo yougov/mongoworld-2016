@@ -68,23 +68,29 @@
 					<section>
 						<h2>About YouGov</h2>
 						<ul>
-							<li>community <!-- voluntary participation --></li>
+							<li>community</li>
 							<li>opinions &amp; habits</li>
 							<li>smart analysis</li>
 							<li>insights and prediction</li>
 							<li><a target="_blank" href="https://today.yougov.com/?stay">today.yougov.com</a></li>
 						</ul>
-					</section>
-					<section>
-						<img data-src="press_clippings.png">
+						<aside class="notes">YouGov maintains a continuous conversation with the community, working with members of our panel to better understand their opinions and habits. Then we apply smart analysis to those isolated data points to model an accurate picture of what the world thinks, and then share this insight and predictive capability to corporations, governments, and other organizations to help them make meaningful decisions. Our US home page tells this story well, so I'd like to briefly share that with you.</aside>
 					</section>
 
 					<section>
-						<h2>About YouGov DevOps</h2>
+						<img data-src="press_clippings.png">
+						<aside class="notes">Many top-tier news agencies call on YouGov to get accurate data on consumer sentiment, policital leanings, and any sort of opinion you can imagine.</aside>
+					</section>
+
+					<section>
+						<h2>About YouGov Dev</h2>
 						<ul>
-							<li>heavily leverage Python and open-source</li>
-							<li>streamlined deployment <!-- near-continuous --></li>
+							<li>38 developers in 9 countries</li>
+							<li>primarily leverage Python and open-source</li>
+							<li>high interactivity and integration</li>
+							<li>streamlined deployment</li>
 						</ul>
+						<aside class="notes">All of our developers work in a virtual environment and many including myself have no home office. We use Python as a first-class production language. We used IRC and now Slack for high interactivity and integrated experience. Hypermedia enables a cohesive experience despite geographic distances. We use Velociraptor for high-agility near-continuous deployment and developers deploy the first day. The environment supports hundreds of applications on dozens of virtual machines organized in squads.</aside>
 					</section>
 
 					<section data-background="https://www.dropbox.com/s/rnq3st8275obhur/WeyTravel98.jpg?dl=1" style="background: rgba(255,255,255,0.5)">
@@ -92,8 +98,9 @@
 						<ul>
 							<li>passion for Python</li>
 							<li>studied web data (semi-structured)</li>
-							<li>motivated to unfetter data <!-- Want to mention friction of ORMs and managing semi-structured data in a highly structured database. --></li>
+							<li>motivated to unfetter data</li>
 						</ul>
+						<aside class="notes">I struggled with the disparity between structured databases and my application's inherent models. I found myself writing my own ORMs before experimenting with SQLObject and later SQLAlchemy. But even those models fell short of modeling semi-structured data. I wanted a solution that was as flexible as XML, and even evaluated XML databases. I discovered MongoDB shortly before joining YouGov in 2010, where YouGov had just migrated the flagship survey system to MongoDB, so I was eager to develop against it.</aside>
 					</section>
 
 				</section>
@@ -102,10 +109,7 @@
 					<section>
 						<h1>Two Challenges</h1>
 						<aside class="notes">
-						YouGov faces many challenges,
-						but today we will discuss two
-						that are particularly salient to
-						this audience.
+						YouGov faces many challenges, but today I will focus on two that are particularly salient to this audience.
 						</aside>
 					</section>
 
@@ -118,8 +122,7 @@
 							<li>high throughput</li>
 							<li><em>increasing</em> throughput</li>
 						</ul>
-						<aside class="notes">
-						daily peak submission rate approaches 4K/minute; 5GB/mo in 2011 -> 90GB/mo during 2015 Q4
+						<aside class="notes">The first challenge is our traditional core offering - survey data collection. Questionnaires are programmed by users and each contains a unique arrangement of variable names and types, but there are some attributes of the collection that are intrinsic to the system. The structured and unstructured portions combine to form a semi-structured record at the heart of the prcoess. The servers handle a fairly high throughput, with daily peak submission rate approaches 4K/minute and this data throughput is increasing, where in 2011, we processed 5GB/mo, that same system is now seeing 90GB/mo (as of Winter 2015).
 						</aside>
 					</section>
 
