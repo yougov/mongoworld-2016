@@ -155,8 +155,7 @@
 							<li>store survey responses as document</li>
 							<li>(automatic) schema migration</li>
 						</ul>
-						<aside class="notes">Originally, responses were
-						stored as a blob of pickled Python</aside>
+						<aside class="notes">YouGov solves the survey data storage challenge by implementing a flexible data model. Originally, responses were stored as a blob of pickled Python. In late 2009, we selected MongoDB to replace that somewhat brittle technique.</aside>
 					</section>
 
 					<section>
@@ -164,8 +163,9 @@
 						<ul>
 							<li>2 datacenters separated by 5,400 miles</li>
 							<li>partitions survey data via tag-aware sharding</li>
-							<li>provides Database-as-a-Service (DBaaS)<!-- a part of the infrastructure available to any and all applications --></li>
+							<li>provides Database-as-a-Service (DBaaS)</li>
 						</ul>
+						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage  these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
 					</section>
 				</section>
 
