@@ -375,13 +375,32 @@ def v10_to_11(manager, case):
 
 					<section>
 						<h2>Shard Key Selection</h2>
-						<aside class="notes">
-						<ul>
-							<li>{region: 1, user_id: 1}</li>
-							<li>{region: 1, survey_id: 1}</li>
-						</ul>
-						</aside>
 						<img data-src="shard_key_survey_id.png">
+					</section>
+
+					<section>
+						<h2>Oops!</h2>
+						<img data-src="shard_key_survey_id 2.png">
+					</section>
+
+					<section>
+						<h2>Let's Try That Again...</h2>
+						<img data-src="shard_key_user_id.png">
+					</section>
+
+					<section>
+						<h2>Much Better!</h2>
+						<img data-src="shard_key_user_id 2.png">
+					</section>
+
+					<section>
+						<h2>Caution: Broadcast Operations</h2>
+						<img data-src="broadcast operation 5.png">
+					</section>
+
+					<section>
+						<h2>Targeted Operations</h2>
+						<img data-src="targeted operation 4.png">
 					</section>
 
 					<section>
@@ -472,10 +491,6 @@ sh.addTagRange(
   "US"                                     // tag
 );
 						</code></pre>
-					</section>
-
-					<section>
-						<h2>Caution: Non-Targeted Queries</h2>
 					</section>
 
 					<section>
