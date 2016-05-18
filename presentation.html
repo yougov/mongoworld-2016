@@ -326,28 +326,7 @@ def v10_to_11(manager, case):
 					</aside>
 
 					<section>
-						<h2>Global Sharded Cluster</h2>
-					</section>
-					<section>
-						<h2>Two Datacenters</h2>
-						<ul>
-							<li>London (a.k.a. "EMEA")</li>
-							<li>Palo Alto, CA (a.k.a. "US")</li>
-						</ul>
-						<img class="auto" data-src="5400_miles.png">
-					</section>
-
-					<section>
-						<h2>Six Shards</h2>
-						<ul>
-							<li>6 shards <!-- Each shard is a replica set with (typically) 3 data-bearing members. -->
-								<ul>
-									<li>3 in EMEA</li>
-									<li>2 in US</li>
-									<li>1 with RS members in both DCs</li><!-- referred to affectionately as "EARTH1" -->
-								</ul>
-							</li>
-						</ul>
+						<h2>Sharding Strategy</h2>
 					</section>
 
 					<section>
@@ -404,6 +383,28 @@ def v10_to_11(manager, case):
 						</ul>
 						</aside>
 						<img data-src="shard_key_survey_id.png">
+					</section>
+
+					<section>
+						<h2>Two Datacenters</h2>
+						<ul>
+							<li>London (a.k.a. "EMEA")</li>
+							<li>Palo Alto, CA (a.k.a. "US")</li>
+						</ul>
+						<img class="auto" data-src="5400_miles.png">
+					</section>
+
+					<section>
+						<h2>Six Shards</h2>
+						<ul>
+							<li>6 shards <!-- Each shard is a replica set with (typically) 3 data-bearing members. -->
+								<ul>
+									<li>3 in EMEA</li>
+									<li>2 in US</li>
+									<li>1 with RS members in both DCs</li><!-- referred to affectionately as "EARTH1" -->
+								</ul>
+							</li>
+						</ul>
 					</section>
 
 					<section>
