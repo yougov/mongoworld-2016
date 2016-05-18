@@ -418,6 +418,7 @@ use admin
 // Step 1: Add shards
 db.runCommand({addShard: "ldn-rs1/ldn-host1", name: "LDN1"});
 db.runCommand({addShard: "ldn-rs2/ldn-host4", name: "LDN2"});
+db.runCommand({addShard: "ldn-rs3/ldn-host7", name: "LDN3"});
 db.runCommand({addShard: "pa-rs1/pa-host1", name: "PA1"});
 db.runCommand({addShard: "pa-rs2/pa-host4", name: "PA2"});
 						</code></pre>
@@ -428,6 +429,7 @@ db.runCommand({addShard: "pa-rs2/pa-host4", name: "PA2"});
 // Step 2: Add shard tags
 sh.addShardTag("LDN1", "EMEA");
 sh.addShardTag("LDN2", "EMEA");
+sh.addShardTag("LDN3", "EMEA");
 sh.addShardTag("PA1", "US");
 sh.addShardTag("PA2", "US");
 						</code></pre>
