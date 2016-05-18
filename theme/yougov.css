@@ -9,3 +9,7 @@ body {
 img.auto {
 	height: auto;
 }
+
+img {
+	height:	500px;
+}
