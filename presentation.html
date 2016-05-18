@@ -406,12 +406,58 @@ def v10_to_11(manager, case):
 					</section>
 
 					<section>
-						<h2>Tag-Aware Sharding</h2>
-						<ul>
-							<li>sh.addShardTag(...)</li>
-							<li>sh.shardCollection(...)</li>
-							<li>sh.addTagRange(...)</li>
-						</ul>
+						<h2>Tag-Aware Sharding (1)</h2>
+						<pre><code class="javascript" data-trim>
+// connect to mongos
+
+// switch to admin database
+use admin
+
+// Step 1: Add shards
+db.runCommand({addShard: "ldn-rs1/ldn-host1", name: "LDN1"});
+db.runCommand({addShard: "ldn-rs2/ldn-host4", name: "LDN2"});
+db.runCommand({addShard: "pa-rs1/pa-host1", name: "PA1"});
+db.runCommand({addShard: "pa-rs2/pa-host4", name: "PA2"});
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tag-Aware Sharding (2)</h2>
+						<pre><code class="javascript" data-trim>
+// Step 2: Add shard tags
+sh.addShardTag("LDN1", "EMEA");
+sh.addShardTag("LDN2", "EMEA");
+sh.addShardTag("PA1", "US");
+sh.addShardTag("PA2", "US");
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tag-Aware Sharding (3)</h2>
+						<pre><code class=javascript" data-trim>
+// Step 3: Enable sharding
+sh.enableSharding("yougov");
+sh.shardCollection(
+  "yougov.interviews",                     // collection namespace
+  {"region": 1, "survey_id": 1}            // shard key pattern
+);
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tag-Aware Sharding (4)</h2>
+						<pre><code class=javascript" data-trim>
+// Step 4: Tag each shard key range
+sh.addTagRange(
+  "yougov.interviews",                     // collection namespace
+  {"region": "EMEA", "survey_id": MinKey}, // min value
+  {"region": "EMEA", "survey_id": MaxKey}, // max value
+  "EMEA"                                   // tag
+);
+sh.addTagRange(
+  "yougov.interviews",                     // collection namespace
+  {"region": "US", "survey_id": MinKey},   // min value
+  {"region": "US", "survey_id": MaxKey},   // max value
+  "US"                                     // tag
+);
+						</code></pre>
 					</section>
 
 					<section>
