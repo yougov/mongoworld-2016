@@ -395,16 +395,27 @@ def v10_to_11(manager, case):
 					</section>
 
 					<section>
-						<h2>Six Shards</h2>
+						<h2>Deploying Shards</h2>
+						<img class="auto" data-src="shard makeup 5.png">
+						<aside class="notes">
+                         Each shard consists of a replica set with (typically) three data-bearing mongod instances (one primary plus two secondaries).
+						</aside>
+					</section>
+
+					<section>
+						<h2>Global Sharded Cluster</h2>
+						<img class="auto" data-src="global cluster.png">
+						<aside class="notes">
 						<ul>
-							<li>6 shards <!-- Each shard is a replica set with (typically) 3 data-bearing members. -->
+							<li>6 shards
 								<ul>
 									<li>3 in EMEA</li>
 									<li>2 in US</li>
-									<li>1 with RS members in both DCs</li><!-- referred to affectionately as "EARTH1" -->
+									<li>1 with RS members in both DCs ("EARTH1")</li>
 								</ul>
 							</li>
 						</ul>
+						</aside>
 					</section>
 
 					<section>
