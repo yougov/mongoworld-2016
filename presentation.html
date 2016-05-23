@@ -329,14 +329,11 @@ def v10_to_11(manager, case):
 				</section>
 
 				<section>
-					<aside class="notes">
-					 Having dived deep into the code, I'd like to step back out and look at the big picture and showcase the global cluster architecture. (consider "transparent partitioning" as a clarifying synonym for sharding). Go into detail about the advantages and challenges of this approach (shard key selection, ensuring targeted queries even during partition, which is likely across continents).
-					</aside>
 
 					<section>
 						<h2>Sharding Strategy</h2>
 						<aside class="notes">
-						 Let's examine some factors you need to consider when implementing a sharding strategy, drawing examples from YouGov's survey system.
+						Having dived deep into the code, I'd like to step back out and look at the big picture and showcase the global cluster architecture, which provides a sort of "transparent partitioning" layer. I'll discuss in detail the advantages and challenges of our approach and examine some factors you need to consider when implementing a sharding strategy, drawing examples from YouGov's survey system.
 						</aside>
 					</section>
 
@@ -585,6 +582,9 @@ db = mongo.get_database('dragoman',
 							<li>managed programmatically</li>
 							<li>seek additional layers of partitioning</li>
 						</ul>
+						<aside class="notes">
+							In addition to partitioning for locality, we still find ourselves manually managing another partition for our older, "archived" data. Ideally, we imagine this data could be transparently partitioned by MongoDB in an additional dimension.
+						</aside>
 					</section>
 
 					<section>
@@ -595,6 +595,9 @@ db = mongo.get_database('dragoman',
 							<li>distribution (performance)</li>
 							<li>storage </li>
 						</ul>
+						<aside class="notes">
+							In this one collection, we've identified at least four factors that motivate us to partition our data; for locality while storing globally, for distribution to keep shards small, for distribution to keep shards fast, and to allocate different classes of data to different storage classes (SSDs vs. Winchester disks)
+						</aside>
 					</section>
 
 				</section>
