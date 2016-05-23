@@ -1,0 +1,15 @@
+body {
+	background-image: url(people.png);
+	background-size:contain;
+	background-repeat:no-repeat;
+	background-position:center bottom;
+	background-color:white;
+}
+
+img.auto {
+	height: auto;
+}
+
+img {
+	height:	500px;
+}

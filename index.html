@@ -1,50 +1,678 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>From the Polls to the Trolls: Seeing What The World Thinks at YouGov</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<meta name="description" content="YouGov showcases their global cluster at MongoWorld 2016">
+		<meta name="author" content="YouGov, Plc.">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="/css/reveal.css">
+		<link rel="stylesheet" href="/css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="/lib/css/zenburn.css">
+
+		<link rel="stylesheet" href="theme/yougov.css">
 
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			var path = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			link.href = '/' + path;
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
 	</head>
+
 	<body>
+
 		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<section>
+					<h1>From the Polls to the Trolls</h1>
+					<h3>Seeing what the world thinks at <a href="https://today.yougov.com/">YouGov</a></h3>
+				</section>
+
+				<section style="background: rgba(255,255,255,0.5)">
+					<ul>
+						<li style="padding: 1em;">YouGov conducts highly dynamic surveys that rely on MongoDB's rich support for semi-structured data.</li>
+
+						<li style="padding: 1em;">YouGov uses tag-aware sharding to provide MongoDB-as-a-Service (MongoDBaaS) for a global operation.</li>
+
+						<li style="padding: 1em;">MongoDB is a joy to use and an effective multipurpose persistence store for large-scale applications.</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>About Us</h2>
+						<aside class="notes">
+						Before we go into the talk, allow
+						me to briefly tell you about YouGov.
+						</aside>
+					</section>
+
+					<section>
+						<h2>About YouGov</h2>
+						<ul>
+							<li>community</li>
+							<li>opinions &amp; habits</li>
+							<li>smart analysis</li>
+							<li>insights and prediction</li>
+							<li><a target="_blank" href="https://today.yougov.com/?stay">today.yougov.com</a></li>
+						</ul>
+						<aside class="notes">YouGov maintains a continuous conversation with the community, working with members of our panel to better understand their opinions and habits. Then we apply smart analysis to those isolated data points to model an accurate picture of what the world thinks, and then share this insight and predictive capability to corporations, governments, and other organizations to help them make meaningful decisions. Our US home page tells this story well, so I'd like to briefly share that with you.</aside>
+					</section>
+
+					<section>
+						<img data-src="press clippings 5.png">
+						<aside class="notes">Many top-tier news agencies call on YouGov to get accurate data on consumer sentiment, policital leanings, and any sort of opinion you can imagine.</aside>
+					</section>
+
+					<section>
+						<h2>About YouGov Dev</h2>
+						<ul>
+							<li>38 developers in 9 countries</li>
+							<li>primarily leverage Python and open-source</li>
+							<li>high interactivity and integration</li>
+							<li>streamlined deployment</li>
+						</ul>
+						<aside class="notes">YouGov Dev makes all of this possible through software. All of our developers work in a virtual environment and many including myself have no home office. We use Python as a first-class production language. We used IRC and now Slack for high interactivity and integrated experience. Hypermedia enables a cohesive experience despite geographic distances. We use a Heroku-like PaaS called Velociraptor for high-agility near-continuous deployment and developers deploy the first day. The environment supports hundreds of applications on dozens of virtual machines organized in squads.</aside>
+					</section>
+
+					<section data-background="https://www.dropbox.com/s/rnq3st8275obhur/WeyTravel98.jpg?dl=1" style="background: rgba(255,255,255,0.5)">
+						<h2>About Jason</h2>
+						<ul>
+							<li>passion for Python</li>
+							<li>studied web data (semi-structured)</li>
+							<li>motivated to unfetter data</li>
+						</ul>
+						<aside class="notes">A bit about me - I started in industry in 1999 and struggled with the disparity between structured databases and my application's inherent models. I found myself writing my own ORMs before experimenting with SQLObject and later SQLAlchemy. But even those models fell short of modeling semi-structured data. I wanted a solution that was as flexible as XML, and even evaluated XML databases. I discovered MongoDB shortly before joining YouGov in 2010, where YouGov had just migrated the flagship survey system to MongoDB, so I was eager to develop against it.</aside>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h1>Two Challenges</h1>
+						<aside class="notes">
+						YouGov faces many challenges, but today I will focus on two that are particularly salient to this audience.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Challenge: Survey Collection</h2>
+						<ul>
+							<li>highly dynamic surveys</li>
+							<li>programmed by users</li>
+							<li>semi-structured data</li>
+							<li>high throughput</li>
+							<li><em>increasing</em> throughput</li>
+						</ul>
+						<aside class="notes">The first challenge is our traditional core offering - survey data collection. Questionnaires are programmed by users and each contains a unique arrangement of variable names and types, but there are some attributes of the collection that are intrinsic to the system. The structured and unstructured portions combine to form a semi-structured record at the heart of the prcoess. The servers handle a fairly high throughput, with daily peak submission rate approaches 4K/minute and this data throughput is increasing, where in 2011, we processed 5GB/mo, that same system is now seeing 90GB/mo (as of Winter 2015).
+						</aside>
+					</section>
+
+					<section>
+						<h2>Challenge: Global Operation</h2>
+						<img data-src="YouGov_panel_map.png">
+						<aside class="notes">
+						Another challenge we face is the servicing of a worldwide operation.
+						<ul>
+							<li>YouGov operates in 37 countries on 5 continents</li>
+							<li>local responsiveness crucial - if you've ever connected to a web site in Europe or China, you know what I mean; we seek a seamless experience regardless of where you're located</li>
+							<li>avoid specialized datastore - we want to rely on industry offerings</li>
+							<li>jurisdictional constraints - we need to support the statuatory requirements of countries and privacy expectations of a diverse world</li>
+						</ul>
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>The Plan</h2>
+						<aside class="notes">
+						Our dev team set out to tackle each of
+						these two challenges within MongoDB.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Flexible Data Model</h2>
+						<ul>
+							<li>store survey responses as document</li>
+							<li>(automatic) schema migration</li>
+						</ul>
+						<aside class="notes">YouGov solves the survey data storage challenge by implementing a flexible data model. Originally, responses were stored as a blob of pickled Python. In late 2009, we selected MongoDB to replace that somewhat brittle technique, storing much of the unstructured data in fields of the document like 'answers' and 'timings', but storing strucural aspects in other fields like 'questionnaire_name' or 'ident' (creating an implied schema). As with any mature system, we anticipate the expectations of the application will change over time. We need a mechanism to manage the evolution of the schema as we develop the application, and for this, we built a technique to automate support for the migration.</aside>
+					</section>
+
+					<section>
+						<h2>Global Sharded Cluster</h2>
+						<ul>
+							<li>2 datacenters separated by 5,400 miles</li>
+							<li>partitions survey data via tag-aware sharding</li>
+							<li>provides Database-as-a-Service (DBaaS)</li>
+						</ul>
+						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage  these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
+					</section>
+				</section>
+
+				<section>
+					<h2>Diving In</h2>
+					<aside class="notes">
+					Here, we'll go into depth on our two key observations
+					</aside>
+				</section>
+
+				<section>
+
+					<section>
+						<h2>Migration Manager</h2>
+						<ul>
+							<li>between driver and application</li>
+							<li>schema version</li>
+							<li>incrementing integer</li>
+							<li>migrates on load</li>
+							<li>untouched on save</li>
+						</ul>
+
+						<aside class="notes">The lean and agile methodology we employ incentivizes our developers to identify meaningful, incremental changes to the system, roll that into production quickly, and if issues arise, roll back quickly. Sometimes these changes necessitate changes to the structure (or schema) of the documents, and it's expensive to stop operations to perform an offline migration. Instead, to address the changes to the schema as the application evolves, we developed a Migration Manager, a sort of adapter or translator that we install between the database driver and the application models. Similar to static migration tools, we assign a version for each schema change with an incrementing integer, and then provide code to migrate a given document from one schema version to the next and back. The Migration Manager then is initialized with a target schema version (the version that the application is designed against), and it migrates each document on load. On save, the application saves naturally in its default version. Allow me to illustrate with a crude drawing.
+						</aside>
+
+					</section>
+
+					<section data-background="Manager%20Diagram.png">
+					</section>
+
+					<section>
+						<h2>Implementation (1)</h2>
+						<pre><code>class Manager(object):
+    """
+    Tag the functions with a target version and keep a registry of which
+    functions were tagged with which revision.
+    """
+    _upgrade_funcs = set()
+
+    def __init__(self, region, target_version):
+        self.region = region
+        self.target_version = target_version
+        self.session = requests.session()
+
+    @classmethod
+    def register(cls, func):
+        """
+        Decorate a migration function with this method
+        to make it available for migrating cases.
+        """
+        cls._add_version_info(func)
+        cls._upgrade_funcs.add(func)
+        return func</code></pre>
+					</section>
+
+					<section>
+						<h2>Implementation (2)</h2>
+						<pre><code>class Manager(object):
+    def migrate_case(self, case):
+        """
+        Migrate the case from its current version to the target version
+        and return it.
+        """
+        orig_ver = case.get('session_version', 0)
+        funcs = self._get_migrate_funcs(orig_ver, self.target_version)
+        for func in funcs:
+            func(self, case)
+            case['session_version'] = func.target
+        return case
+
+    @classmethod
+    def _get_migrate_funcs(cls, orig_version, target_version):
+        """
+        >>> funcs = list(Manager._get_migrate_funcs(1, 3))
+        >>> len(funcs)
+        2
+        >>> funcs == [v1_to_2, v2_to_3]
+        True
+        >>> funcs = list(Manager._get_migrate_funcs(7, 6))
+        >>> len(funcs)
+        1
+        >>> funcs == [v7_to_6]
+        True
+        """
+        direction = 1 if target_version > orig_version else -1
+        versions = range(orig_version, target_version + direction, direction)
+        transitions = recipes.pairwise(versions)
+        return itertools.starmap(cls._get_func, transitions)</code></pre>
+					</section>
+
+					<section>
+						<h2>Implementation (3)</h2>
+						<pre><code>@Manager.register
+def v6_to_7(manager, case):
+    """
+    V7 adds the survey_id and user_id fields
+    """
+    ident = CaseIdent(case.get('ident', ''))
+    case.setdefault('user_id', ident.user_id)
+    case.setdefault('survey_id', ident.survey_id)
+
+@Manager.register
+def v7_to_6(manager, case):
+    ident = CaseIdent.from_parts(
+        case.pop('user_id', None),
+        case.pop('survey_id', None),
+    )
+    case['ident'] = str(ident)</code></pre>
+					</section>
+
+
+					<section>
+						<h2>Caution: Field Rename</h2>
+						<ul>
+							<li>queries</li>
+							<li>indexes</li>
+						</ul>
+						<aside class="notes">
+						Some field rename operations require special consideration, mainly fields that are used in queries or indexes.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Mitigation</h2>
+						<ul>
+							<li>support both fields</li>
+							<li>maintain dual indexes</li>
+							<li>backfill migration</li>
+						</ul>
+						<aside class="notes">
+						We found we can mitigate these concerns by supporting both fields and running indexes on both the new and old fields until the old versions of the application are no longer supported.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Other considerations</h2>
+						<ul>
+							<li>single-document design</li>
+							<li>forward-compatibility</li>
+							<li>reversible operations</li>
+						</ul>
+						<aside class="notes">Other things to consider, we've only employed this technique in a single-document design. I imagine an implementation that considers multiple documents may be possible, but it isn't obvious to me that the abstraction could apply. Also, it's important to be aware that there must be forward compatibility: every deployed consumer must have the latest migrations to support documents saved in the highest schema number, which just means you have to be diligent about updating the Migration manager in all application versions before rolling out applications that save new versions. Finally, the changes to the schema must be necessarily reversible.</aside>
+					</section>
+
+					<section>
+						<h2>Implementation (4)</h2>
+						<pre><code>@Manager.register
+def v10_to_11(manager, case):
+    """
+    Remove legacy attributes.
+    """
+    case.pop('survey_name', None)
+    case.pop('survey_version', None)
+    case.pop('ident', None)</code></pre>
+    						<aside class="notes">
+    						Here's an example where you can see in version 11 of our schema, we finally removed several legacy attributes. Once no applications rely on these fields, we migrate and resave all cases with this latest version to reclaim the space.
+    						</aside>
+					</section>
+
+				</section>
+
+				<section>
+
+					<section>
+						<h2>Sharding Strategy</h2>
+						<aside class="notes">
+						Having dived deep into the code, I'd like to step back out and look at the big picture and showcase the global cluster architecture, which provides a sort of "transparent partitioning" layer. I'll discuss in detail the advantages and challenges of our approach and examine some factors you need to consider when implementing a sharding strategy, drawing examples from YouGov's survey system.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Interview Data Model</h2>
+						<img data-src="interview data model 5.png">
+						<aside class="notes">
+						 While interacting with YouGov's platform, our users complete surveys.  We store each individual's responses to a given survey as a separate "interview" document in MongoDB.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Interview Life Cycle</h2>
+						<img data-src="interview life cycle 7.png">
+						<aside class="notes">
+						 There are two main phases in the life of an interview: an active phase and a static phase.
+						 While a user is taking a survey, their interview document is being read and updated frequently.
+                         After the user has completed a survey, their interview document is no longer updated.
+						 During the ensuing static phase of its life, an interview is primarily accessed via multi-document queries generated by YouGov researchers.
+						 Typically, an interview is active for a relatively short period (minutes to days).
+						 In our survey system, we store active and static interviews in separate MongoDB collections, and archive interviews once they are no longer active.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Interview Data Schema</h2>
+						<pre><code class="javascript">{
+	"region": "EMEA",
+	"survey_id": "rfc1274",
+	"user_id": 216074,
+	"responses": {
+		"favourite_drink": "chocolate milk",
+		// ...
+	}
+}</code></pre>
+						<aside class="notes">
+						 This is a partial interview document showing the "responses" subdocument and several of the key metadata fields.
+						 The region identifies the region of the world in which the survey is being conducted (in this case, "EMEA" = "Europe, the Middle East, and Africa").  This field plays an important role in the tag-aware sharding that I'll describe shortly.
+						 The survey_id and and user_id refer, respectively, to the survey and the user associated with this interview.
+						 When we planned the sharding of our interviews collections, we considered choosing either survey_id or user_id as the shard key.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Shard Key Selection</h2>
+						<img data-src="shard_key_survey_id.png">
+						<aside class="notes">
+						 This diagram shows read and write queries being routed via mongos to the active interviews collection, sharded on survey_id, for users taking different surveys.
+						 If the survey_ids of active interviews are sufficiently varied and (more or less) randomly distributed, this approach would tend to yield balanced traffic patterns.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Oops!</h2>
+						<img data-src="shard_key_survey_id 2.png">
+						<aside class="notes">
+						 In practice, however, our active interviews at any point in time are often dominated by a small number of surveys, each requiring a large contemporaneous sample.
+						 Since all interviews for a given survey share the same shard key value, they will reside in the same chunk.  This results in a disproportionate amount of the read/write traffic being directed to one (or a few) "hot" shards.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Let's Try That Again...</h2>
+						<img data-src="shard_key_user_id.png">
+						<aside class="notes">
+						 For our active interviews, then, a better option was to shard the collection on user_id.
+						 Since there is little or no correlation between a user's ID and which surveys they take, this approach tends to distribute traffic more evenly among all shards...
+						</aside>
+					</section>
+
+					<section>
+						<h2>Much Better!</h2>
+						<img data-src="shard_key_user_id 2.png">
+						<aside class="notes">
+						 ...even when a single survey is generating the vast majority of currently active interviews.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Caution: Broadcast Operations</h2>
+						<img data-src="broadcast operation 5.png">
+						<aside class="notes">
+						 A different story emerges when we consider a researcher compiling and analyzing a survey's results.
+						 In this situation, documents in the static interviews collection are typically queried by survey_id.
+						 If the static interviews collection is sharded by user_id, the mongos query router must broadcast the query to every shard (1, 2, 3).
+						 In addition, if the query specifies a sort()/limit()/skip(), mongos may need to perform additional processing (4) on the results yielded by the individual shards, prior to returning results to the client.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Targeted Operations</h2>
+						<img data-src="targeted operation 4.png">
+						<aside class="notes">
+						 Instead, we sharded the collection of static interviews on survey_id.
+						 Most queries can therefore be targeted to a single shard.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Two Datacenters</h2>
+						<ul>
+							<li>London (a.k.a. "EMEA")</li>
+							<li>Palo Alto, CA (a.k.a. "US")</li>
+						</ul>
+						<img class="auto" data-src="5400_miles.png">
+					</section>
+
+					<section>
+						<h2>Deploying Shards</h2>
+						<img class="auto" data-src="shard makeup 5.png">
+						<aside class="notes">
+                         Each shard consists of a replica set with three data-bearing mongod instances (one primary plus two secondaries).
+						</aside>
+					</section>
+
+					<section>
+						<h2>Global Sharded Cluster</h2>
+						<img class="auto" data-src="global cluster.png">
+						<aside class="notes">
+						<ul>
+							<li>6 shards
+								<ul>
+									<li>3 in EMEA</li>
+									<li>2 in US</li>
+									<li>1 with RS members in both DCs ("EARTH1")</li>
+								</ul>
+							</li>
+						</ul>
+						</aside>
+					</section>
+
+					<section>
+						<h2>Tag-Aware Sharding (1)</h2>
+						<pre><code class="javascript" data-trim>
+// connect to mongos
+
+// switch to admin database
+use admin
+
+// Step 1: Add shards
+db.runCommand({addShard: "ldn-rs1/ldn-host1", name: "LDN1"});
+db.runCommand({addShard: "ldn-rs2/ldn-host4", name: "LDN2"});
+db.runCommand({addShard: "ldn-rs3/ldn-host7", name: "LDN3"});
+db.runCommand({addShard: "pa-rs1/pa-host1", name: "PA1"});
+db.runCommand({addShard: "pa-rs2/pa-host4", name: "PA2"});
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tag-Aware Sharding (2)</h2>
+						<pre><code class="javascript" data-trim>
+// Step 2: Add shard tags
+sh.addShardTag("LDN1", "EMEA");
+sh.addShardTag("LDN2", "EMEA");
+sh.addShardTag("LDN3", "EMEA");
+sh.addShardTag("PA1", "US");
+sh.addShardTag("PA2", "US");
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tag-Aware Sharding (3)</h2>
+						<pre><code class=javascript" data-trim>
+// Step 3: Enable sharding
+sh.enableSharding("yougov");
+sh.shardCollection(
+  "yougov.interviews",                     // collection namespace
+  {"region": 1, "survey_id": 1}            // shard key pattern
+);
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tag-Aware Sharding (4)</h2>
+						<pre><code class=javascript" data-trim>
+// Step 4: Tag each shard key range
+sh.addTagRange(
+  "yougov.interviews",                     // collection namespace
+  {"region": "EMEA", "survey_id": MinKey}, // min value
+  {"region": "EMEA", "survey_id": MaxKey}, // max value
+  "EMEA"                                   // tag
+);
+sh.addTagRange(
+  "yougov.interviews",                     // collection namespace
+  {"region": "US", "survey_id": MinKey},   // min value
+  {"region": "US", "survey_id": MaxKey},   // max value
+  "US"                                     // tag
+);
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>(Mongo) Database-as-a-Service</h2>
+						<ul>
+							<li><em>mongos</em> instance running on each app server</li>
+							<li>applications connect to mongodb://localhost/</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Read Preference "nearest"</h2>
+						<ul>
+							<li>provides low-latency reads when using geographically distributed replica sets</li>
+						</ul>
+						<!-- read preference defaults to ReadPreference.PRIMARY -->
+						<pre><code>from pymongo import MongoClient, ReadPreference
+
+# set read preference on the client
+mongo = MongoClient('localhost',
+                    read_preference=ReadPreference.NEAREST)
+
+# ...or on an individual database
+mongo = MongoClient('localhost')
+db = mongo.get_database('dragoman',
+                        read_preference=ReadPreference.NEAREST)</code></pre>
+					</section>
+
+					<section>
+						<h2>Database Creation</h2>
+						<pre><code>def create_db_in_shard(db_name, shard, client=None):
+	"""
+	In a sharded cluster, create a database in a particular shard.
+	"""
+	client = client or pymongo.MongoClient()
+	# flush the router config to ensure it's not stale
+	res = client.admin.command('flushRouterConfig')
+	if not res.get('ok'):
+		raise RuntimeError("unable to flush router config")
+	if shard not in get_ids(client.config.shards):
+		raise ValueError(nf("Unknown shard {shard}"))
+	if db_name in get_ids(client.config.databases):
+		raise ValueError("database already exists")
+	# MongoDB doesn't have a 'create database' command, so insert an
+	#  item into a collection and then drop the collection.
+	client[db_name].foo.insert({'foo': 1})
+	client[db_name].foo.drop()
+	if client[db_name].collection_names():
+		raise ValueError("database has collections")
+	res = client.admin.command('movePrimary', value=db_name, to=shard)
+	if not res.get('ok'):
+		raise RuntimeError(str(res))
+	return nf("Successfully created {db_name} in {shard} via {hostname}")</code></pre>
+					</section>
+
+					<section>
+						<h2>Multi-Dimensional Partitioning</h2>
+						<ul>
+							<li>still partition for archival</li>
+							<li>managed programmatically</li>
+							<li>seek additional layers of partitioning</li>
+						</ul>
+						<aside class="notes">
+							In addition to partitioning for locality, we still find ourselves manually managing another partition for our older, "archived" data. Ideally, we imagine this data could be transparently partitioned by MongoDB in an additional dimension.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Partitioning Motives</h2>
+						<ul>
+							<li>locality</li>
+							<li>distribution (size)</li>
+							<li>distribution (performance)</li>
+							<li>storage </li>
+						</ul>
+						<aside class="notes">
+							In this one collection, we've identified at least four factors that motivate us to partition our data; for locality while storing globally, for distribution to keep shards small, for distribution to keep shards fast, and to allocate different classes of data to different storage classes (SSDs vs. Winchester disks)
+						</aside>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Predictions</h2>
+						<ul>
+							<li>migrate with whimsy</li>
+							<li>all apps in global cluster</li>
+						</ul>
+						<aside class="notes">YouGov is dedicated to facilitating prediction, and I'll make some predictions of my own based on what I've shared here - with MongoDB, we will continue to migrate our schemas with whimsy and we will support the breadth and depth of our semi-structured data needs in a uniformally managed but geographically diverse global cluster.</aside>
+					</section>
+
+					<section>
+						<h2>Wishes</h2>
+						<ul>
+							<li>Supply shard hint, independent from query <a href="https://jira.mongodb.org/browse/SERVER-11991">SERVER-11991</a></li>
+							<li>Generalized custom shard logic, independent from data in records</li>
+							<li>Oplog-only replica for creating new replicas <a href="https://jira.mongodb.org/browse/SERVER-14539">Server-14539</a></li>
+							<li>Embedded solution (sqlite)</li>
+						</ul>
+
+						<aside class="notes">While MongoDB has been a fantastic solution for us, allowing us to take for granted that some issues are just solved in the database, we can always imagine improvements. These items are things that I would most like to see in MongoDB.</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Conclusions</h2>
+						<ul>
+							<li>If you have dynamically changing data, choose a schemaless database. Take advantage of the schemaless aspects and migrate with whimsy.</li>
+							<li>When your company is successful and international, use tag-aware sharding to achieve partitioning of your data without losing control, but let MongoDB manage the abstraction.</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h1>Questions?</h1>
+				</section>
+
 			</div>
+
 		</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+		<script src="/lib/js/head.min.js"></script>
+		<script src="/js/reveal.js"></script>
 
 		<script>
-			// More info https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				history: true,
 
-				// More info https://github.com/hakimel/reveal.js#dependencies
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				showNotes: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
 				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: '/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '/plugin/zoom-js/zoom.js', async: true },
+					{ src: '/plugin/notes/notes.js', async: true }
 				]
 			});
+
 		</script>
+
 	</body>
+
 </html>
