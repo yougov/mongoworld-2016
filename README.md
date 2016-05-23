@@ -1,1 +1,1 @@
-This repository houses [From the Polls to the Trolls, seeing what the world thinks at YouGov](https://rawgit.com/yougov/mongoworld-2016/master/presentation.html#/), the MongoWorld 2016 presentation by YouGov.
+This repository houses [From the Polls to the Trolls, seeing what the world thinks at YouGov](https://rawgit.com/yougov/mongoworld-2016/master/index.html#/), the MongoWorld 2016 presentation by YouGov.
