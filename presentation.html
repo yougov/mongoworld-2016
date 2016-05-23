@@ -285,7 +285,7 @@ def v7_to_6(manager, case):
 							<li>indexes</li>
 						</ul>
 						<aside class="notes">
-						Some field rename operations require special consideration.
+						Some field rename operations require special consideration, mainly fields that are used in queries or indexes.
 						</aside>
 					</section>
 
@@ -296,6 +296,9 @@ def v7_to_6(manager, case):
 							<li>maintain dual indexes</li>
 							<li>backfill migration</li>
 						</ul>
+						<aside class="notes">
+						We found we can mitigate these concerns by supporting both fields and running indexes on both the new and old fields until the old versions of the application are no longer supported.
+						</aside>
 					</section>
 
 					<section>
@@ -305,7 +308,7 @@ def v7_to_6(manager, case):
 							<li>forward-compatibility</li>
 							<li>reversible operations</li>
 						</ul>
-						<aside class="notes">Other things to consider, we've only employed this technique in a single-document design. I imagine an implementation that considers multiple documents may be possible, but it isn't obvious to me that the abstraction could apply. Also, it's important to be aware that there must be forward compatibility: every deployed consumer must have the latest migrations to support documents saved in the highest schema number. Finally, the changes to the schema must be somehow reversible.</aside>
+						<aside class="notes">Other things to consider, we've only employed this technique in a single-document design. I imagine an implementation that considers multiple documents may be possible, but it isn't obvious to me that the abstraction could apply. Also, it's important to be aware that there must be forward compatibility: every deployed consumer must have the latest migrations to support documents saved in the highest schema number, which just means you have to be diligent about updating the Migration manager in all application versions before rolling out applications that save new versions. Finally, the changes to the schema must be necessarily reversible.</aside>
 					</section>
 
 					<section>
@@ -318,6 +321,9 @@ def v10_to_11(manager, case):
     case.pop('survey_name', None)
     case.pop('survey_version', None)
     case.pop('ident', None)</code></pre>
+    						<aside class="notes">
+    						Here's an example where you can see in version 11 of our schema, we finally removed several legacy attributes. Once no applications rely on these fields, we migrate and resave all cases with this latest version to reclaim the space.
+    						</aside>
 					</section>
 
 				</section>
