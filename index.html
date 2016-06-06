@@ -146,13 +146,6 @@
 				</section>
 
 				<section>
-					<section>
-						<h2>The Plan</h2>
-						<aside class="notes">
-						Our dev team set out to tackle each of
-						these two challenges within MongoDB.
-						</aside>
-					</section>
 
 					<section>
 						<h2>Flexible Data Model</h2>
@@ -162,26 +155,6 @@
 						</ul>
 						<aside class="notes">YouGov solves the survey data storage challenge by implementing a flexible data model. Before the migration to MongoDB, responses were stored as a blob of pickled Python. In late 2009, we selected MongoDB to replace that somewhat brittle technique, grouping much of the unstructured data in fields of the document like 'answers' and 'timings', but storing strucural aspects in top-level fields like 'questionnaire_name' or 'ident' (creating an implied schema). As with any mature system, we anticipate the expectations of the application to change over time. We need a mechanism to manage the evolution of the schema as we develop the application, and for this, we built a technique to automate support for the migration.</aside>
 					</section>
-
-					<section>
-						<h2>Global Sharded Cluster</h2>
-						<ul>
-							<li>2 datacenters separated by 5,400 miles</li>
-							<li>partitions survey data via tag-aware sharding</li>
-							<li>provides Database-as-a-Service (DBaaS)</li>
-						</ul>
-						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. We started out deploying to production against master/slave pairs. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
-					</section>
-				</section>
-
-				<section>
-					<h2>Diving In</h2>
-					<aside class="notes">
-					Here, we'll go into depth on our two key observations
-					</aside>
-				</section>
-
-				<section>
 
 					<section>
 						<h2>Migration Manager</h2>
@@ -333,12 +306,21 @@ def v10_to_11(manager, case):
 				</section>
 
 				<section>
-
 					<section>
-						<h2>Sharding Strategy</h2>
+						<h2>Global Sharded Cluster</h2>
 						<aside class="notes">
 						Having dived deep into the code, I'd like to step back out and look at the big picture and showcase the global cluster architecture, which provides a sort of "transparent partitioning" layer. I'll discuss in detail the advantages and challenges of our approach and examine some factors you need to consider when implementing a sharding strategy, drawing examples from YouGov's survey system.
 						</aside>
+					</section>
+
+					<section>
+						<h2>Sharding Strategy</h2>
+						<ul>
+							<li>2 datacenters separated by 5,400 miles</li>
+							<li>partitions survey data via tag-aware sharding</li>
+							<li>provides Database-as-a-Service (DBaaS)</li>
+						</ul>
+						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. We started out deploying to production against master/slave pairs. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
 					</section>
 
 					<section>
