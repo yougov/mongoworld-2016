@@ -50,13 +50,13 @@
 					<ul>
 						<li style="padding: 1em;">YouGov conducts highly dynamic surveys that rely on MongoDB's rich support for semi-structured data.</li>
 
-						<li style="padding: 1em;">YouGov uses tag-aware sharding to provide MongoDB-as-a-Service (MongoDBaaS) for a global operation.</li>
+						<li style="padding: 1em;">YouGov uses tag-aware sharding to provide MongoDB-as-a-Service (MongoDBaaS) for a global enterprise.</li>
 
 						<li style="padding: 1em;">MongoDB is a joy to use and an effective multipurpose persistence store for large-scale applications.</li>
 					</ul>
 
 					<aside class="notes">
-					I hope you're all having a great conference, and I hope today you will will take away a few things from my talk - namely, How ...
+					I hope you're all having a great conference. Today I'll share a bit about the YouGov operation and I hope to convey how ...
 					</aside>
 				</section>
 
@@ -100,7 +100,7 @@
 					<section data-background="https://www.dropbox.com/s/rnq3st8275obhur/WeyTravel98.jpg?dl=1" style="background: rgba(255,255,255,0.5)">
 						<h2>About Jason</h2>
 						<ul>
-							<li>passion for Python</li>
+							<li>&lt;3 Python</li>
 							<li>studied web data (semi-structured)</li>
 							<li>motivated to unfetter data</li>
 						</ul>
@@ -160,7 +160,7 @@
 							<li>store survey responses as document</li>
 							<li>(automatic) schema migration</li>
 						</ul>
-						<aside class="notes">YouGov solves the survey data storage challenge by implementing a flexible data model. Originally, responses were stored as a blob of pickled Python. In late 2009, we selected MongoDB to replace that somewhat brittle technique, storing much of the unstructured data in fields of the document like 'answers' and 'timings', but storing strucural aspects in other fields like 'questionnaire_name' or 'ident' (creating an implied schema). As with any mature system, we anticipate the expectations of the application will change over time. We need a mechanism to manage the evolution of the schema as we develop the application, and for this, we built a technique to automate support for the migration.</aside>
+						<aside class="notes">YouGov solves the survey data storage challenge by implementing a flexible data model. Before the migration to MongoDB, responses were stored as a blob of pickled Python. In late 2009, we selected MongoDB to replace that somewhat brittle technique, grouping much of the unstructured data in fields of the document like 'answers' and 'timings', but storing strucural aspects in top-level fields like 'questionnaire_name' or 'ident' (creating an implied schema). As with any mature system, we anticipate the expectations of the application to change over time. We need a mechanism to manage the evolution of the schema as we develop the application, and for this, we built a technique to automate support for the migration.</aside>
 					</section>
 
 					<section>
@@ -170,7 +170,7 @@
 							<li>partitions survey data via tag-aware sharding</li>
 							<li>provides Database-as-a-Service (DBaaS)</li>
 						</ul>
-						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage  these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
+						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. We started out deploying to production against master/slave pairs. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
 					</section>
 				</section>
 
