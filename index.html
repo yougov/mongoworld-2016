@@ -298,8 +298,11 @@ def v10_to_11(manager, case):
     case.pop('survey_name', None)
     case.pop('survey_version', None)
     case.pop('ident', None)</code></pre>
+    						<div><a href="https://github.com/jaraco/jaraco.mongodb">
+    							https://github.com/jaraco/jaraco.mongodb
+    						</a></div>
     						<aside class="notes">
-    						Here's an example where you can see in version 11 of our schema, we finally removed several legacy attributes. Once no applications rely on these fields, we migrate and resave all cases with this latest version to reclaim the space.
+    						Here's an example where you can see in version 11 of our schema, we finally removed several legacy attributes. Once no applications rely on these fields, we migrate and resave all cases with this latest version to reclaim the space. I'm pleased to say to that as of last week, we have released the code as open-source in the jaraco.mongodb package, so for your Python applications, this functionality is available for your use today.
     						</aside>
 					</section>
 
