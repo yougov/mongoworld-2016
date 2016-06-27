@@ -16,9 +16,11 @@ img {
 
 .gapless-inline-container {
     font-size: 0 !important;
-}
-
-/* DELETEME - cut up fragment images into vertical slices instead */
-img.fragment {
-    width: 100px;
+	position: absolute;
+	left :100px;
+	top: 75px;
+	min-width: 30px;
+	min-height: 30px;
+	width: 765px;
+	height: 560px;
 }
