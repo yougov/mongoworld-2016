@@ -101,7 +101,7 @@
 							<li>high interactivity and integration</li>
 							<li>streamlined deployment</li>
 						</ul>
-						<aside class="notes">YouGov Dev makes all of this possible through software. All of our developers work in a virtual environment and many including myself have no home office. We use Python as a first-class production language. We used IRC and now Slack for high interactivity and integrated experience. Hypermedia enables a cohesive experience despite geographic distances. We use a Heroku-like PaaS called Velociraptor for high-agility near-continuous deployment and developers deploy the first day. The environment supports hundreds of applications on dozens of virtual machines organized in squads.</aside>
+						<aside class="notes">YouGov Dev makes all of this possible through software. All of our developers work in a shared, virtual environment where many including myself have no home office. We use Python as a first-class production language. We used IRC and now Slack for high interactivity and integrated experience. Hypermedia enables a cohesive experience despite geographic distances. We use a Heroku-like PaaS called Velociraptor for high-agility near-continuous deployment and developers deploy the first day. The environment supports hundreds of applications on dozens of virtual machines organized in squads.</aside>
 					</section>
 
 					<section data-background="https://www.dropbox.com/s/rnq3st8275obhur/WeyTravel98.jpg?dl=1" style="background: rgba(255,255,255,0.5)">
@@ -133,7 +133,7 @@
 							<li>high throughput</li>
 							<li><em>increasing</em> throughput</li>
 						</ul>
-						<aside class="notes">The first challenge is our traditional core offering - survey data collection. Questionnaires are programmed by users and each contains a unique arrangement of variable names and types, but there are some attributes of the collection that are intrinsic to the system. The structured and unstructured portions combine to form a semi-structured record at the heart of the prcoess. The servers handle a fairly high throughput, with daily peak submission rate approaches 4K/minute and this data throughput is increasing, where in 2011, we processed 5GB/mo, that same system is now seeing 90GB/mo (as of Winter 2015).
+						<aside class="notes">The first challenge is our traditional core offering - survey data collection. Our surveys and questionnaires are programmed by users and each contains a unique arrangement of variable names and types, but there are also attributes of the collection that are intrinsic to the system. The structured and unstructured portions combine to form a semi-structured record at the heart of the prcoess. The servers must handle a fairly high throughput, with daily peak submission rate approaches 4K/minute. This data throughput is increasing, where in 2011, we processed 5GB/mo, that same system is now seeing over 90GB/mo (as of Winter 2015).
 						</aside>
 					</section>
 
@@ -257,7 +257,8 @@ def v7_to_6(manager, case):
 							<li>indexes</li>
 						</ul>
 						<aside class="notes">
-						Some field rename operations require special consideration, mainly fields that are used in queries or indexes.
+						I should caution that some field rename operations require special consideration, mainly fields that are used in queries or indexes.
+						If the applications rely on those fields for efficiently targeting documents, you'll need to be careful that the application can do so with a mix of old and new names.
 						</aside>
 					</section>
 
@@ -318,7 +319,7 @@ def v10_to_11(manager, case):
 							<li>partitions survey data via tag-aware sharding</li>
 							<li>provides Database-as-a-Service (DBaaS)</li>
 						</ul>
-						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate unified yet globally-distributed fashion. We started out deploying to production against master/slave pairs. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
+						<aside class="notes">To address the challenge of serving many applications in a unified global environment, we first recognized that the foundation of our application is the database, and so it would need to operate in a unified yet globally-distributed fashion. We started out deploying to production against master/slave pairs. Thankfully, MongoDB also was innovating around these needs and was implementing replica sets and sharding and then tag aware sharding. We set out to leverage these features to create a single sharded cluster spanning two data centers, but representing a single global set of databases as a part of the infrastructure available to any and all applications.</aside>
 					</section>
 
 					<section>
@@ -470,6 +471,9 @@ db.runCommand({addShard: "ldn-rs3/ldn-host7", name: "LDN3"});
 db.runCommand({addShard: "pa-rs1/pa-host1", name: "PA1"});
 db.runCommand({addShard: "pa-rs2/pa-host4", name: "PA2"});
 						</code></pre>
+						<aside class="notes">
+							We configure the cluster by adding each of the replica sets (or shards) to the cluster by issuing these commands to the admin database.
+						</aside>
 					</section>
 					<section>
 						<h2>Tag-Aware Sharding (2)</h2>
@@ -563,6 +567,9 @@ db = mongo.get_database('dragoman',
 	if not res.get('ok'):
 		raise RuntimeError(str(res))
 	return nf("Successfully created {db_name} in {shard} via {hostname}")</code></pre>
+						<aside class="notes">
+							I'd also like to share here a routine we've developed for creating a database on a particular shard. Because we have the global, sharded cluster, it's often important to create a database on a particularly relevant shard, especially for databases that won't be sharded. By default, MongoDB will select a shard that has low load or usage, but often we will want to override that selection. This routine allows developers to do just that. It does so by first doing some sanity checks, inserting a document into a new collection and dropping that collection (to trigger the creation of the database), then invoking the movePrimary method to move the database to the target shard. Having this routine helps us avoid mistakenly moving existing databases or failing to consider the implications of a move operation. We expose this functionality in our Slack bot for effortless invocation. This function is also available to Python programmers in the jaraco.mongodb package.
+						</aside>
 					</section>
 
 					<section>
@@ -599,7 +606,7 @@ db = mongo.get_database('dragoman',
 							<li>migrate with whimsy</li>
 							<li>all apps in global cluster</li>
 						</ul>
-						<aside class="notes">YouGov is dedicated to facilitating prediction, and I'll make some predictions of my own based on what I've shared here - with MongoDB, we will continue to migrate our schemas with whimsy and we will support the breadth and depth of our semi-structured data needs in a uniformally managed but geographically diverse global cluster.</aside>
+						<aside class="notes">As YouGov is dedicated to facilitating prediction, I'll make some predictions of my own based on what I've shared here - with MongoDB, we will continue to migrate our schemas with whimsy and we will support the breadth and depth of our semi-structured data needs in a uniformally managed but geographically diverse global cluster.</aside>
 					</section>
 
 					<section>
@@ -630,6 +637,9 @@ db = mongo.get_database('dragoman',
 					<div><a href="https://bit.ly/polls2trolls">
 						https://bit.ly/polls2trolls
 					</a></div>
+					<aside class="notes">
+						Thank you all for your time. I hope you've learned something new from our experiences. I know I went through some of this pretty quickly, but this presentation is available online for you to review any aspects in more depth. I'll be around at the party tonight and also for the conference tomorrow, but I also have some time to take questions now.
+					</aside>
 				</section>
 
 			</div>
