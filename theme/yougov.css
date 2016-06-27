@@ -13,3 +13,12 @@ img.auto {
 img {
 	height:	500px;
 }
+
+.gapless-inline-container {
+    font-size: 0 !important;
+}
+
+/* DELETEME - cut up fragment images into vertical slices instead */
+img.fragment {
+    width: 100px;
+}
