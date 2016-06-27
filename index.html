@@ -176,62 +176,51 @@
 
 					<section>
 						<h2>Implementation (1)</h2>
-						<pre><code>class Manager(object):
-    """
-    Tag the functions with a target version and keep a registry of which
-    functions were tagged with which revision.
-    """
-    _upgrade_funcs = set()
+						<pre><code>class Manager:
+	"""
+	A manager for facilitating the registration of migration functions
+	and applying those migrations to documents.
+	"""
 
-    def __init__(self, region, target_version):
-        self.region = region
-        self.target_version = target_version
-        self.session = requests.session()
+	version_attribute_name = 'version'
+	_upgrade_funcs = set()
 
-    @classmethod
-    def register(cls, func):
-        """
-        Decorate a migration function with this method
-        to make it available for migrating cases.
-        """
-        cls._add_version_info(func)
-        cls._upgrade_funcs.add(func)
-        return func</code></pre>
+	def __init__(self, target_version):
+		self.target_version = target_version
+
+	@classmethod
+	def register(cls, func):
+		"""
+		Decorate a migration function with this method
+		to make it available for migrating cases.
+		"""
+		cls._add_version_info(func)
+		cls._upgrade_funcs.add(func)
+		return func
+						</code></pre>
 					</section>
 
 					<section>
 						<h2>Implementation (2)</h2>
-						<pre><code>class Manager(object):
-    def migrate_case(self, case):
-        """
-        Migrate the case from its current version to the target version
-        and return it.
-        """
-        orig_ver = case.get('session_version', 0)
-        funcs = self._get_migrate_funcs(orig_ver, self.target_version)
-        for func in funcs:
-            func(self, case)
-            case['session_version'] = func.target
-        return case
+						<pre><code>class Manager:
+	def migrate_doc(self, doc):
+		"""
+		Migrate the doc from its current version to the target version
+		and return it.
+		"""
+		orig_ver = doc.get(self.version_attribute_name, 0)
+		funcs = self._get_migrate_funcs(orig_ver, self.target_version)
+		for func in funcs:
+			func(self, doc)
+			doc[self.version_attribute_name] = func.target
+		return doc
 
-    @classmethod
-    def _get_migrate_funcs(cls, orig_version, target_version):
-        """
-        >>> funcs = list(Manager._get_migrate_funcs(1, 3))
-        >>> len(funcs)
-        2
-        >>> funcs == [v1_to_2, v2_to_3]
-        True
-        >>> funcs = list(Manager._get_migrate_funcs(7, 6))
-        >>> len(funcs)
-        1
-        >>> funcs == [v7_to_6]
-        True
-        """
-        direction = 1 if target_version > orig_version else -1
-        versions = range(orig_version, target_version + direction, direction)
-        transitions = recipes.pairwise(versions)
-        return itertools.starmap(cls._get_func, transitions)</code></pre>
+	@classmethod
+	def _get_migrate_funcs(cls, orig_version, target_version):
+		direction = 1 if target_version > orig_version else -1
+		versions = range(orig_version, target_version + direction, direction)
+		transitions = recipes.pairwise(versions)
+		return itertools.starmap(cls._get_func, transitions)</code></pre>
 					</section>
 
 					<section>
@@ -253,7 +242,6 @@ def v7_to_6(manager, case):
     )
     case['ident'] = str(ident)</code></pre>
 					</section>
-
 
 					<section>
 						<h2>Caution: Field Rename</h2>
